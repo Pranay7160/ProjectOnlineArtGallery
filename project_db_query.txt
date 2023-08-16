@@ -1,0 +1,96 @@
+Table query
+
+##City
+CREATE TABLE city (
+    city_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    city_name VARCHAR(255)
+);
+
+## customer
+CREATE TABLE customer (
+    cust_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    address VARCHAR(255),
+    contacts VARCHAR(255),
+    email VARCHAR(255),
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    password VARCHAR(255),
+    city_id INT,
+    FOREIGN KEY (city_id) REFERENCES city(city_id)
+);
+
+##category
+CREATE TABLE category (
+    cat_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(255)
+);
+
+##login
+CREATE TABLE login (
+    login_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255),
+    password VARCHAR(255),
+    cust_id INT,
+    status INT,
+    FOREIGN KEY (cust_id) REFERENCES customer(cust_id)
+);
+
+##Seller
+CREATE TABLE seller (
+    seller_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    seller_name varchar(255),
+    address VARCHAR(255),
+    contact_number VARCHAR(255),
+    email VARCHAR(255),
+    password VARCHAR(255),
+    status INT,
+    city_id INT,
+    FOREIGN KEY (city_id) REFERENCES city(city_id)
+);
+
+##art_details
+CREATE TABLE art_details (
+    art_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    material VARCHAR(255),
+    price DECIMAL(10, 2),
+    rating INT,
+    seller_id INT,
+    FOREIGN KEY (seller_id) REFERENCES seller(seller_id)
+);
+
+
+## arts
+CREATE TABLE arts (
+    a_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    description TEXT,
+    seller_name VARCHAR(255),
+    image BLOB,
+    cat_id INT,
+    art_id INT,
+    seller_id INT,
+    FOREIGN KEY (cat_id) REFERENCES category(cat_id),
+    FOREIGN KEY (art_id) REFERENCES art_details(art_id),
+    FOREIGN KEY (seller_id) REFERENCES seller(seller_id)
+);
+
+
+CREATE TABLE orders (
+    order_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    order_date DATE,
+    payment VARCHAR(255),
+    quantity INT,
+    status VARCHAR(255),
+    cust_id INT,
+    art_id INT,
+    FOREIGN KEY (cust_id) REFERENCES customer(cust_id),
+    FOREIGN KEY (art_id) REFERENCES arts(a_id)
+);
+
+
+CREATE TABLE cart (
+    cart_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    quantity INT,
+    cust_id INT,
+    art_id INT,
+    FOREIGN KEY (cust_id) REFERENCES customer(cust_id)
+);
